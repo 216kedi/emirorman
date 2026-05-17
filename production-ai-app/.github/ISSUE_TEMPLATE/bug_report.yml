@@ -1,0 +1,78 @@
+name: Bug raporu
+description: Beklenmeyen bir davranış mı buldunuz?
+title: "[BUG] "
+labels: ["bug", "triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Teşekkürler! Lütfen aşağıdaki alanları doldurun.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: Ne oldu?
+      description: Açık ve kısa bir açıklama.
+      placeholder: "Örnek: /query endpoint'i 502 döndürüyor ama Qdrant ayakta."
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Beklenen davranış
+      description: Ne olmasını bekliyordunuz?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Yeniden üretme adımları
+      description: |
+        Adım adım nasıl yeniden üretilir?
+      placeholder: |
+        1. `make api` ile başlat
+        2. `curl -X POST ...`
+        3. Hata görünüyor
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: İlgili loglar
+      description: trace_id varsa ekleyin.
+      render: shell
+
+  - type: input
+    id: version
+    attributes:
+      label: Sürüm / commit
+      placeholder: "v0.2.0 veya abc1234"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Ortam
+      options:
+        - Docker Compose (lokal)
+        - Kubernetes
+        - Doğrudan (uv run)
+        - Diğer
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Kontrol listesi
+      options:
+        - label: Mevcut issue'ları aradım
+          required: true
+        - label: En güncel sürümü kullanıyorum
+          required: true

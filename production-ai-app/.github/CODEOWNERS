@@ -1,0 +1,15 @@
+# Varsayılan sahip: tüm dosyalar
+* @your-org/core-team
+
+# Güvenlik guard'ları — zorunlu inceleme
+/production-ai-app/security/ @your-org/security-team
+
+# CI/CD ve release pipeline'ı — zorunlu inceleme
+/.github/workflows/ @your-org/platform-team
+
+# Evaluation altyapısı
+/production-ai-app/evaluation/ @your-org/ml-team
+
+# LLM ve retrieval çekirdeği
+/production-ai-app/services/llm/ @your-org/core-team
+/production-ai-app/components/ @your-org/core-team

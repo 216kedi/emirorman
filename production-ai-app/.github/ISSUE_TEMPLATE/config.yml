@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Güvenlik açığı
+    url: https://github.com/your-org/production-ai-app/security/advisories/new
+    about: Lütfen güvenlik açıklarını gizli kanal üzerinden bildirin.
+  - name: Soru / tartışma
+    url: https://github.com/your-org/production-ai-app/discussions
+    about: Genel sorular için Discussions kullanın.

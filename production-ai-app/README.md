@@ -1,83 +1,156 @@
 # production-ai-app
 
-Production-grade RAG + agent platform — 2026 stack.
+[![CI](https://github.com/your-org/production-ai-app/actions/workflows/ci.yml/badge.svg)](https://github.com/your-org/production-ai-app/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-> Not just "a FastAPI wrapper around an LLM."
+Production-grade RAG + ajan platformu — 2026 stack.
+
+> "AI uygulamanız sadece 'GPT etrafına sarılmış bir FastAPI' değil."
 >
-> Real production AI systems need: hybrid retrieval, semantic caching,
-> conversational memory, prompt versioning + caching, agentic intelligence,
-> safety guards, evaluation, and observability — all async, all typed,
-> all wired together.
+> Gerçek production AI sistemleri şunlara ihtiyaç duyar: hibrit retrieval,
+> graph genişleme, late-interaction reranking, semantik önbellek,
+> çok katmanlı bellek, versiyonlu + optimize edilmiş prompt'lar,
+> ajan zekası, güvenlik guard'ları, değerlendirme pipeline'ı ve gözlemlenebilirlik.
+
+---
+
+## Mimari
+
+```
+İstek
+  │
+  ▼
+[CorrelationMiddleware]  →  trace_id bağlanır
+  │
+  ▼
+[InputGuard]             →  injection / PII / uzunluk kontrolü
+  │
+  ▼
+[QueryRouter]            →  simple_lookup | rag | agentic   (Instructor typed)
+  │
+  ▼
+[QueryRewriter]          →  retrieval için yeniden yazar
+  │
+  ▼
+[HybridRetriever]        →  Qdrant (dense) + BM25 (sparse) + RRF füzyon
+  │
+  ▼
+[GraphRetriever]         →  bilgi grafiği komşu genişleme
+  │
+  ▼
+[LateInteractionReranker]→  ColBERT tarzı MaxSim
+  │
+  ▼
+[ContentFilter]          →  PII redaction
+  │
+  ▼
+[LLM]                    →  Anthropic (prompt caching) veya OpenAI
+  │
+  ▼
+[OutputFilter]           →  grounding + refusal kontrolü
+  │
+  ▼
+[SemanticCache.put]      →  yanıtı önbelleğe al
+  │
+  ▼
+Yanıt
+```
 
 ## Stack
 
-- **API:** FastAPI (async, ORJSON, lifespan, correlation middleware)
-- **LLM:** Anthropic (with prompt caching) + OpenAI, via a `Protocol` abstraction
-- **Typed outputs:** Instructor (Pydantic schemas from LLMs)
-- **Retrieval:** Qdrant (async) + BM25, fused with Reciprocal Rank Fusion
-- **Reranking:** LLM-as-judge scorer
-- **Cache:** Redis-backed semantic cache (cosine over query embeddings)
-- **Memory:** Redis-backed multi-turn conversation store
-- **Tooling exposure:** MCP server (`services/mcp_server.py`) for Claude Desktop / Cursor / etc.
-- **Streaming:** SSE via `sse-starlette`
-- **Logging:** structlog with `trace_id` correlation
-- **Package mgmt:** uv (lockfile-based, fast)
-- **Container:** multi-stage, non-root, distroless-style runtime
+| Katman | Teknoloji |
+|---|---|
+| API | FastAPI async, ORJSON, SSE, slowapi |
+| LLM | Anthropic (prompt caching) + OpenAI; Protocol abstraction |
+| Typed outputs | Instructor (Pydantic AI) |
+| Retrieval | Qdrant + BM25 → RRF → GraphRAG → ColBERT MaxSim |
+| Önbellek | Redis semantic cache |
+| Bellek | Episodic + Semantic + Procedural (Redis) |
+| MCP | FastMCP sunucu (Claude Desktop / Cursor) |
+| Prompt opt. | DSPy (BootstrapFewShot + MIPROv2) |
+| Güvenlik | Input / Content / Output guard zinciri |
+| Eval | RAGAS + LLM-as-judge + Recall@k / nDCG + Trajectory + Red-team |
+| Observability | structlog + OTel + Langfuse + Prometheus + Grafana |
+| Paket | uv (lockfile, PEP 735) |
+| Container | Multi-stage Dockerfile, non-root, healthcheck |
 
-## Layout
-
-```
-production-ai-app/
-├── app/                  FastAPI: routes, config, middleware, DI, errors
-├── components/           Hybrid retrieval, reranker
-├── services/             LLM clients, vector store, RAG pipeline, cache, MCP
-├── prompts/              Versioned, cache-marked templates
-├── agents/               Self-correcting retrieval + pluggable tools
-├── security/             Input / content / output guards
-├── evaluation/           Golden set + offline/online evaluators
-├── observability/        Tracer, feedback, cost
-├── data/                 raw → processed → index_config
-├── scripts/              seed, migrate, healthcheck
-├── frontend/             Streamlit UI
-├── tests/                pytest-asyncio
-└── docs/                 architecture, API, deployment
-```
-
-## Quickstart
+## Hızlı başlangıç
 
 ```bash
-cp .env.example .env  # fill in API keys
-docker compose up --build
+git clone https://github.com/your-org/production-ai-app
+cd production-ai-app
+cp .env.example .env   # ANTHROPIC_API_KEY ve OPENAI_API_KEY doldurun
+make dev               # bağımlılıkları kur
+docker compose up -d
+make migrate           # Qdrant koleksiyonu oluştur
+make seed              # örnek dökümanları indeksle
 ```
 
-Then:
+**API:** http://localhost:8000/docs
+**Frontend:** http://localhost:8501
+**Metrics:** http://localhost:8000/metrics
+
+### Örnek sorgu
+
 ```bash
-docker compose exec api python scripts/migrate.py
-docker compose exec api python scripts/seed.py
 curl -X POST http://localhost:8000/query \
   -H "Content-Type: application/json" \
-  -d '{"query":"What is MCP?"}'
+  -d '{"query": "Hibrit retrieval nasıl çalışır?"}'
 ```
 
-Stream tokens:
+### SSE streaming
+
 ```bash
 curl -N -X POST http://localhost:8000/query/stream \
   -H "Content-Type: application/json" \
-  -d '{"query":"Explain hybrid retrieval briefly."}'
+  -d '{"query": "MCP nedir?"}'
 ```
 
-## Development
+### MCP sunucusu (Claude Desktop / Cursor)
 
 ```bash
-uv sync --group dev
-uv run uvicorn app.main:app --reload
-uv run pytest
-uv run ruff check .
+make mcp
 ```
 
-## MCP server
+## Geliştirme
 
-Expose this app to any MCP client:
 ```bash
-uv run python -m services.mcp_server
+make test           # testler
+make test-cov       # coverage raporu
+make lint           # ruff lint + format
+make eval           # offline evaluation (ANTHROPIC_API_KEY gerekli)
+make red-team       # güvenlik guard red-team
+make optimize-prompts  # DSPy prompt optimizasyonu
 ```
+
+## Klasör yapısı
+
+```
+production-ai-app/
+├── app/              FastAPI: routes, config, auth, middleware, DI
+├── components/       Hibrit retrieval, GraphRAG, ColBERT reranker
+├── services/
+│   ├── llm/          Anthropic + OpenAI istemcileri
+│   ├── vector_store/ Qdrant async wrapper
+│   ├── memory/       Episodic + Semantic + Procedural
+│   └── ...           RAG pipeline, cache, router, DSPy optimizer, MCP
+├── prompts/          Versiyonlu şablonlar, DSPy modülleri
+├── agents/           Document grader, decomposer, router, tools, trajectory
+├── security/         Input / Content / Output guard'ları
+├── evaluation/       RAGAS, LLM-as-judge, retrieval metrikleri, red-team
+├── observability/    OTel, Langfuse, Prometheus, maliyet takibi
+├── data/             Ham → işlenmiş → indeks config
+├── scripts/          seed, migrate, healthcheck
+├── frontend/         Streamlit UI
+├── tests/            pytest-asyncio (30+ test)
+├── docs/             Mimari, API, deployment
+└── .github/          CI/CD, eval nightly, issue şablonları, Dependabot
+```
+
+## Katkı
+
+[CONTRIBUTING.md](CONTRIBUTING.md) dosyasına bakın.
+
+## Lisans
+
+[MIT](LICENSE)

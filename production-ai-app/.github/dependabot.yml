@@ -1,0 +1,50 @@
+version: 2
+
+updates:
+  # Python bağımlılıkları (uv / pip ekosistemi)
+  - package-ecosystem: "pip"
+    directory: "/production-ai-app"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 10
+    groups:
+      llm-clients:
+        patterns:
+          - "anthropic"
+          - "openai"
+          - "instructor"
+          - "dspy-ai"
+      observability:
+        patterns:
+          - "opentelemetry-*"
+          - "langfuse"
+          - "prometheus-*"
+      retrieval:
+        patterns:
+          - "qdrant-client"
+          - "rank-bm25"
+          - "ragas"
+          - "datasets"
+      fastapi-stack:
+        patterns:
+          - "fastapi"
+          - "uvicorn"
+          - "pydantic*"
+          - "sse-starlette"
+          - "slowapi"
+    ignore:
+      - dependency-name: "numpy"
+        update-types: ["version-update:semver-major"]
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 5

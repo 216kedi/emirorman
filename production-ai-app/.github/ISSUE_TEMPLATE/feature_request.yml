@@ -1,0 +1,58 @@
+name: Özellik isteği
+description: Yeni bir özellik veya iyileştirme önerin mi var?
+title: "[FEAT] "
+labels: ["enhancement"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Harika bir fikriniz var mı? Anlatalım.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Hangi problemi çözüyor?
+      description: Şu an neyi yapamıyorsunuz ya da neyin eksik olduğunu hissediyorsunuz?
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Önerilen çözüm
+      description: Ne yapmak istiyorsunuz? Mümkünse API / arayüz tasarımını belirtin.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Hangi alan?
+      multiple: true
+      options:
+        - Retrieval (hybrid, GraphRAG, ColBERT)
+        - LLM / Prompt
+        - Memory (episodic, semantic, procedural)
+        - Güvenlik (guardrails)
+        - Değerlendirme (eval, red-team)
+        - Gözlemlenebilirlik (metrics, tracing)
+        - API / FastAPI
+        - Frontend
+        - CI/CD
+        - Diğer
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Değerlendirdiğiniz alternatifler
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Kontrol listesi
+      options:
+        - label: Benzer özellik isteği bulunmuyor
+          required: true
+        - label: Bu özelliği kendim implemente etmeye hazırım (PR açabilirim)
