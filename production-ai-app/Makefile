@@ -3,7 +3,7 @@ PYTHON        := uv run python
 PYTEST        := uv run pytest
 RUFF          := uv run ruff
 
-.PHONY: help install dev lint format test test-cov migrate seed mcp docker-up docker-down clean
+.PHONY: help install dev lint format test test-cov migrate seed mcp docker-up docker-down eval red-team synthetic clean
 
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
@@ -47,6 +47,15 @@ docker-up: ## Start full stack with docker compose
 
 docker-down: ## Stop docker compose stack
 	docker compose down -v
+
+eval: ## Run offline evaluation (requires running API + ANTHROPIC_API_KEY)
+	$(PYTHON) -m evaluation.offline_eval
+
+red-team: ## Run red-team probes against guardrails
+	$(PYTHON) -m evaluation.red_team
+
+synthetic: ## Generate synthetic golden QA pairs from docs/
+	$(PYTHON) evaluation/synthetic_data.py
 
 clean: ## Remove caches and build artefacts
 	find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null; true

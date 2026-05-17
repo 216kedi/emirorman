@@ -1,11 +1,48 @@
 {
-  "version": "0.1.0",
+  "version": "0.2.0",
+  "description": "Golden evaluation set — update expected_answer after each major model upgrade",
   "items": [
     {
       "id": "g-0001",
       "query": "What is the project's mission?",
-      "expected_answer": "Build a production-grade RAG / agent platform.",
-      "expected_sources": ["docs/architecture.md"]
+      "expected_answer": "Build a production-grade RAG and agent platform.",
+      "expected_sources": ["docs/architecture.md"],
+      "tags": ["general", "easy"]
+    },
+    {
+      "id": "g-0002",
+      "query": "How does hybrid retrieval work?",
+      "expected_answer": "Hybrid retrieval combines dense vector search with sparse BM25 and fuses rankings using Reciprocal Rank Fusion.",
+      "expected_sources": ["docs/retrieval.md"],
+      "tags": ["retrieval", "medium"]
+    },
+    {
+      "id": "g-0003",
+      "query": "What is Anthropic prompt caching and why use it?",
+      "expected_answer": "Prompt caching allows reusing previously processed prompt prefixes, reducing input token cost by up to 90%.",
+      "expected_sources": ["docs/caching.md"],
+      "tags": ["llm", "cost", "medium"]
+    },
+    {
+      "id": "g-0004",
+      "query": "What safety layers does the platform have?",
+      "expected_answer": "Three layers: input_guard (prompt injection, PII), content_filter (redaction), and output_filter (grounding check).",
+      "expected_sources": ["docs/architecture.md"],
+      "tags": ["safety", "medium"]
+    },
+    {
+      "id": "g-0005",
+      "query": "What is MCP and how is it exposed here?",
+      "expected_answer": "MCP (Model Context Protocol) standardizes tool integration. The platform exposes rag_query and search_knowledge_base as MCP tools via services/mcp_server.py.",
+      "expected_sources": ["docs/mcp.md"],
+      "tags": ["mcp", "hard"]
+    },
+    {
+      "id": "g-0006",
+      "query": "How is conversation memory stored?",
+      "expected_answer": "Multi-turn conversation history is stored in Redis with a TTL of 7 days, using ConversationStore in services/conversation.py.",
+      "expected_sources": ["docs/architecture.md"],
+      "tags": ["memory", "medium"]
     }
   ]
 }

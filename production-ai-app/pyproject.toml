@@ -34,6 +34,12 @@ dependencies = [
     "opentelemetry-instrumentation-httpx>=0.49b0",
     "langfuse>=2.57",
     "slowapi>=0.1.9",
+    "ragas>=0.2",
+    "datasets>=3.0",
+    "scipy>=1.14",
+    "numpy>=2.1",
+    "pandas>=2.2",
+    "rich>=13.9",
 ]
 
 [dependency-groups]
@@ -46,6 +52,15 @@ dev = [
     "pre-commit>=4.0",
     "pip-audit>=2.7",
     "pytest-httpx>=0.32",
+    "faker>=30.0",
+]
+
+[dependency-groups]
+eval = [
+    "ragas>=0.2",
+    "datasets>=3.0",
+    "pandas>=2.2",
+    "rich>=13.9",
 ]
 
 [build-system]

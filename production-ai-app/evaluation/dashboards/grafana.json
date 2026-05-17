@@ -1,0 +1,77 @@
+{
+  "title": "Production AI App — Quality & Cost",
+  "uid": "prod-ai-quality",
+  "schemaVersion": 39,
+  "refresh": "1m",
+  "panels": [
+    {
+      "id": 1,
+      "title": "Query Throughput (req/min)",
+      "type": "timeseries",
+      "datasource": { "type": "prometheus" },
+      "targets": [{ "expr": "rate(rag_queries_total[1m]) * 60", "legendFormat": "{{route}}" }],
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 }
+    },
+    {
+      "id": 2,
+      "title": "P95 Query Latency (s)",
+      "type": "timeseries",
+      "datasource": { "type": "prometheus" },
+      "targets": [{ "expr": "histogram_quantile(0.95, rate(rag_query_duration_seconds_bucket[5m]))", "legendFormat": "p95" }],
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 }
+    },
+    {
+      "id": 3,
+      "title": "Semantic Cache Hit Rate",
+      "type": "stat",
+      "datasource": { "type": "prometheus" },
+      "targets": [{ "expr": "rate(semantic_cache_hits_total[5m]) / rate(rag_queries_total[5m])", "legendFormat": "Hit rate" }],
+      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 8 }
+    },
+    {
+      "id": 4,
+      "title": "Guardrail Blocks (per layer)",
+      "type": "timeseries",
+      "datasource": { "type": "prometheus" },
+      "targets": [{ "expr": "rate(guardrail_blocks_total[5m])", "legendFormat": "{{layer}}" }],
+      "gridPos": { "h": 4, "w": 6, "x": 6, "y": 8 }
+    },
+    {
+      "id": 5,
+      "title": "LLM Tokens / min",
+      "type": "timeseries",
+      "datasource": { "type": "prometheus" },
+      "targets": [
+        { "expr": "rate(llm_tokens_total{type='input'}[1m]) * 60", "legendFormat": "input {{provider}}" },
+        { "expr": "rate(llm_tokens_total{type='output'}[1m]) * 60", "legendFormat": "output {{provider}}" }
+      ],
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 }
+    },
+    {
+      "id": 6,
+      "title": "Prompt Cache Savings (read tokens/min)",
+      "type": "timeseries",
+      "datasource": { "type": "prometheus" },
+      "targets": [{ "expr": "rate(llm_cache_tokens_total{direction='read'}[1m]) * 60", "legendFormat": "cache read" }],
+      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 12 }
+    },
+    {
+      "id": 7,
+      "title": "Active Requests",
+      "type": "stat",
+      "datasource": { "type": "prometheus" },
+      "targets": [{ "expr": "active_requests", "legendFormat": "Active" }],
+      "gridPos": { "h": 4, "w": 6, "x": 6, "y": 12 }
+    }
+  ],
+  "templating": {
+    "list": [
+      {
+        "name": "environment",
+        "type": "query",
+        "datasource": { "type": "prometheus" },
+        "query": "label_values(rag_queries_total, environment)"
+      }
+    ]
+  }
+}
