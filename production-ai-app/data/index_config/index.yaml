@@ -1,0 +1,13 @@
+vector_store:
+  type: qdrant
+  collection: prod_ai_app
+  dim: 1024
+  distance: cosine
+
+bm25:
+  k1: 1.2
+  b: 0.75
+
+chunking:
+  size: 800
+  overlap: 120

@@ -1,0 +1,11 @@
+{
+  "version": "0.1.0",
+  "items": [
+    {
+      "id": "g-0001",
+      "query": "What is the project's mission?",
+      "expected_answer": "Build a production-grade RAG / agent platform.",
+      "expected_sources": ["docs/architecture.md"]
+    }
+  ]
+}
