@@ -26,6 +26,14 @@ dependencies = [
     "rank-bm25>=0.2.2",
     "mcp>=1.1",
     "orjson>=3.10",
+    "prometheus-fastapi-instrumentator>=7.0",
+    "opentelemetry-api>=1.28",
+    "opentelemetry-sdk>=1.28",
+    "opentelemetry-exporter-otlp-proto-grpc>=1.28",
+    "opentelemetry-instrumentation-fastapi>=0.49b0",
+    "opentelemetry-instrumentation-httpx>=0.49b0",
+    "langfuse>=2.57",
+    "slowapi>=0.1.9",
 ]
 
 [dependency-groups]
@@ -36,6 +44,8 @@ dev = [
     "respx>=0.21",
     "ruff>=0.8",
     "pre-commit>=4.0",
+    "pip-audit>=2.7",
+    "pytest-httpx>=0.32",
 ]
 
 [build-system]
@@ -70,3 +80,11 @@ ignore = ["E501"]
 testpaths = ["tests"]
 asyncio_mode = "auto"
 addopts = "-ra --strict-markers"
+
+[tool.coverage.run]
+source = ["app", "components", "services", "security", "prompts", "observability"]
+omit = ["tests/*", "scripts/*", "evaluation/eval_results/*"]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 60

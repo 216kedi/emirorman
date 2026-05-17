@@ -36,6 +36,9 @@ class Settings(BaseSettings):
     enable_input_guard: bool = True
     enable_output_guard: bool = True
 
+    api_key: str = ""
+    rate_limit_per_minute: int = 60
+
 
 @lru_cache
 def get_settings() -> Settings:
