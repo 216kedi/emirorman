@@ -3,7 +3,7 @@ PYTHON        := uv run python
 PYTEST        := uv run pytest
 RUFF          := uv run ruff
 
-.PHONY: help install dev lint format test test-cov migrate seed mcp docker-up docker-down eval red-team synthetic clean
+.PHONY: help install dev lint format test test-cov migrate seed mcp docker-up docker-down eval red-team synthetic optimize-prompts clean
 
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
@@ -56,6 +56,12 @@ red-team: ## Run red-team probes against guardrails
 
 synthetic: ## Generate synthetic golden QA pairs from docs/
 	$(PYTHON) evaluation/synthetic_data.py
+
+optimize-prompts: ## Run DSPy prompt optimizer (BootstrapFewShot)
+	$(PYTHON) -m services.dspy_optimizer --optimizer bootstrap
+
+optimize-prompts-mipro: ## Run DSPy MIPROv2 optimizer (daha yavaş, daha iyi)
+	$(PYTHON) -m services.dspy_optimizer --optimizer mipro --n-trials 10
 
 clean: ## Remove caches and build artefacts
 	find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null; true
