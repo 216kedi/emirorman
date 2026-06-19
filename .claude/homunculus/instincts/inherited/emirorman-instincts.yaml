@@ -1,0 +1,240 @@
+# Instincts generated from https://github.com/216kedi/emirorman
+# Generated: 2026-06-19T10:16:12.543Z
+# Version: 2.0
+# NOTE: This file supplements (does not replace) any existing curated instincts.
+# High-confidence manually curated instincts should be preserved alongside these.
+
+---
+id: emirorman-commit-length
+trigger: "when writing a commit message"
+confidence: 0.6
+domain: git
+source: repo-analysis
+source_repo: https://github.com/216kedi/emirorman
+---
+
+# Emirorman Commit Length
+
+## Action
+
+Write moderate-length commit messages (~63 characters)
+
+## Evidence
+
+- Average commit message length: 63 chars
+- Based on 1 commits
+
+---
+id: emirorman-naming-files
+trigger: "when creating a new file"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/216kedi/emirorman
+---
+
+# Emirorman Naming Files
+
+## Action
+
+Use camelCase naming convention
+
+## Evidence
+
+- Analyzed file naming patterns in repository
+- Dominant pattern: camelCase
+
+---
+id: emirorman-import-relative
+trigger: "when importing modules"
+confidence: 0.75
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/216kedi/emirorman
+---
+
+# Emirorman Import Relative
+
+## Action
+
+Use relative imports for project files
+
+## Evidence
+
+- Import analysis shows relative import pattern
+- Example: import { x } from '../lib/x'
+
+---
+id: emirorman-export-style
+trigger: "when exporting from a module"
+confidence: 0.7
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/216kedi/emirorman
+---
+
+# Emirorman Export Style
+
+## Action
+
+Prefer named exports
+
+## Evidence
+
+- Export pattern analysis
+- Dominant style: named
+
+---
+id: emirorman-instinct-function-naming
+trigger: "When creating a new function in Python code"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: 216kedi/emirorman
+---
+
+# Emirorman Instinct Function Naming
+
+## Action
+
+Name the function using camelCase
+
+## Evidence
+
+- Pattern in namingConventions.functions
+
+---
+id: emirorman-instinct-class-naming
+trigger: "When defining a new class in Python code"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: 216kedi/emirorman
+---
+
+# Emirorman Instinct Class Naming
+
+## Action
+
+Name the class using PascalCase
+
+## Evidence
+
+- Pattern in namingConventions.classes
+
+---
+id: emirorman-instinct-constant-naming
+trigger: "When declaring a constant in Python code"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: 216kedi/emirorman
+---
+
+# Emirorman Instinct Constant Naming
+
+## Action
+
+Name the constant using SCREAMING_SNAKE_CASE
+
+## Evidence
+
+- Pattern in namingConventions.constants
+
+---
+id: emirorman-instinct-file-naming
+trigger: "When creating a new file"
+confidence: 0.7
+domain: code-style
+source: repo-analysis
+source_repo: 216kedi/emirorman
+---
+
+# Emirorman Instinct File Naming
+
+## Action
+
+Name the file using camelCase
+
+## Evidence
+
+- Pattern in namingConventions.files
+
+---
+id: emirorman-instinct-import-style
+trigger: "When importing modules in Python code"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: 216kedi/emirorman
+---
+
+# Emirorman Instinct Import Style
+
+## Action
+
+Use relative imports
+
+## Evidence
+
+- Pattern in importStyle
+
+---
+id: emirorman-instinct-export-style
+trigger: "When exporting modules or functions"
+confidence: 0.7
+domain: code-style
+source: repo-analysis
+source_repo: 216kedi/emirorman
+---
+
+# Emirorman Instinct Export Style
+
+## Action
+
+Use named exports
+
+## Evidence
+
+- Pattern in exportStyle
+
+---
+id: emirorman-instinct-commit-format
+trigger: "When writing a git commit message"
+confidence: 0.8
+domain: git
+source: repo-analysis
+source_repo: 216kedi/emirorman
+---
+
+# Emirorman Instinct Commit Format
+
+## Action
+
+Write a freeform message without a specific prefix, typically concise (around 63 characters on average)
+
+## Evidence
+
+- Pattern in commits.type
+- Pattern in commits.averageLength
+- Example: 'Elis Evleri: ESP32 firmware + WhatsApp alarm bildirim backend'i'
+
+---
+id: emirorman-instinct-test-location
+trigger: "When adding tests to the codebase"
+confidence: 0.7
+domain: testing
+source: repo-analysis
+source_repo: 216kedi/emirorman
+---
+
+# Emirorman Instinct Test Location
+
+## Action
+
+Place test files in mixed locations (not strictly separated from source code)
+
+## Evidence
+
+- Pattern in folderStructure.testLocation
+
