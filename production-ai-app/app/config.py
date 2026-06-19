@@ -39,6 +39,16 @@ class Settings(BaseSettings):
     api_key: str = ""
     rate_limit_per_minute: int = 60
 
+    # WhatsApp / Meta Cloud API (Elis Evleri sensor alarm notifications)
+    building_name: str = "Elis Evleri"
+    whatsapp_access_token: str = ""
+    whatsapp_phone_number_id: str = ""
+    whatsapp_api_version: str = "v21.0"
+    whatsapp_template_name: str = "elis_alarm"
+    whatsapp_template_lang: str = "tr"
+    whatsapp_recipients: str = ""  # comma-separated E.164 numbers, e.g. +905551112233,+905554445566
+    alert_cooldown_seconds: int = 60
+
 
 @lru_cache
 def get_settings() -> Settings:
