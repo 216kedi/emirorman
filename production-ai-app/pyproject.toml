@@ -57,7 +57,6 @@ dev = [
     "faker>=30.0",
 ]
 
-[dependency-groups]
 eval = [
     "ragas>=0.2",
     "datasets>=3.0",

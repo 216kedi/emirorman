@@ -12,12 +12,14 @@ from app.dependencies import shutdown as deps_shutdown
 from app.errors import AppError, app_error_handler, unhandled_exception_handler
 from app.logging import configure_logging, get_logger
 from app.middleware import CorrelationMiddleware
-from app.routes import feedback, health, metrics, query
+from app.routes import alerts, feedback, health, metrics, query
 from observability.tracer import setup_tracing
 
 log = get_logger(__name__)
 
-limiter = Limiter(key_func=get_remote_address, default_limits=[f"{settings.rate_limit_per_minute}/minute"])
+limiter = Limiter(
+    key_func=get_remote_address, default_limits=[f"{settings.rate_limit_per_minute}/minute"]
+)
 
 
 @asynccontextmanager
@@ -25,7 +27,9 @@ async def lifespan(app: FastAPI):
     configure_logging()
     setup_tracing()
     log.info("app_starting", environment=settings.environment, version=settings.version)
-    Instrumentator().instrument(app).expose(app, endpoint="/metrics/process", include_in_schema=False)
+    Instrumentator().instrument(app).expose(
+        app, endpoint="/metrics/process", include_in_schema=False
+    )
     try:
         yield
     finally:
@@ -53,6 +57,7 @@ def create_app() -> FastAPI:
     app.include_router(query.router)
     app.include_router(metrics.router)
     app.include_router(feedback.router)
+    app.include_router(alerts.router)
     return app
 
 
